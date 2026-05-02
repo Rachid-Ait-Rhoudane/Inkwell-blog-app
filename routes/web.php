@@ -14,9 +14,9 @@ Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [SessionController::class, 'create'])->name('login');
-    Route::post('/login', [SessionController::class, 'store']);
+    Route::post('/login', [SessionController::class, 'store'])->name('login.store');
     Route::get('/register', [RegisterController::class, 'create'])->name('register');
-    Route::post('/register', [RegisterController::class, 'store']);
+    Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 });
 
 Route::post('/logout', [SessionController::class, 'destroy'])
