@@ -1,5 +1,8 @@
 <script setup>
 import AppLayout from '../../Layout/AppLayout.vue'
+import InputError from '../../Components/InputError.vue'
+import InputLabel from '../../Components/InputLabel.vue'
+import PrimaryButton from '../../Components/PrimaryButton.vue'
 import SlugInput from '../../Components/SlugInput.vue'
 import TextArea from '../../Components/TextArea.vue'
 import TextInput from '../../Components/TextInput.vue'
@@ -49,13 +52,9 @@ function submit() {
                 Back to Categories
             </Link>
 
-            <button
-                :disabled="form.processing"
-                class="px-5 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-700 disabled:opacity-50 transition-colors"
-                @click="submit"
-            >
+            <PrimaryButton type="button" :disabled="form.processing" @click="submit">
                 {{ form.processing ? 'Saving…' : 'Update Category' }}
-            </button>
+            </PrimaryButton>
         </div>
 
         <!-- Body -->
@@ -65,20 +64,17 @@ function submit() {
                 <!-- Name + Slug -->
                 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
                     <div>
-                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                        <InputLabel for="name" value="Name" />
                         <TextInput
                             id="name"
                             v-model="form.name"
                             placeholder="Category name…"
                         />
-                        <p v-if="form.errors.name" class="mt-1 text-red-500 text-xs">{{ form.errors.name }}</p>
+                        <InputError :message="form.errors.name" />
                     </div>
 
                     <div>
-                        <label for="slug" class="block text-sm font-medium text-gray-700 mb-1">
-                            Slug
-                            <span class="font-normal text-gray-400 text-xs ml-1">(auto-generated)</span>
-                        </label>
+                        <InputLabel for="slug">Slug <span class="font-normal text-gray-400 text-xs ml-1">(auto-generated)</span></InputLabel>
                         <SlugInput
                             id="slug"
                             v-model="form.slug"
@@ -86,7 +82,7 @@ function submit() {
                             placeholder="category-slug"
                             @input="slugManuallyEdited = true"
                         />
-                        <p v-if="form.errors.slug" class="mt-1 text-red-500 text-xs">{{ form.errors.slug }}</p>
+                        <InputError :message="form.errors.slug" />
                     </div>
                 </div>
             </div>
@@ -95,10 +91,7 @@ function submit() {
             <div>
                 <!-- Description -->
                 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-                    <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
-                        Description
-                        <span class="font-normal text-gray-400 text-xs ml-1">(optional)</span>
-                    </label>
+                    <InputLabel for="description">Description <span class="font-normal text-gray-400 text-xs ml-1">(optional)</span></InputLabel>
                     <TextArea
                         id="description"
                         v-model="form.description"
@@ -107,7 +100,7 @@ function submit() {
                         placeholder="A short description of this category…"
                     />
                     <div class="flex items-start justify-between mt-1 gap-2">
-                        <p v-if="form.errors.description" class="text-red-500 text-xs">{{ form.errors.description }}</p>
+                        <InputError :message="form.errors.description" />
                         <p class="text-xs text-gray-400 ml-auto shrink-0">{{ form.description.length }}/1000</p>
                     </div>
                 </div>

@@ -4,7 +4,7 @@ use App\Models\Media;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 
-test('deletes a media file', function () {
+it('deletes a media file', function () {
     $user = User::factory()->create();
 
     Storage::fake('public');
@@ -25,7 +25,7 @@ test('deletes a media file', function () {
     Storage::disk('public')->assertMissing('media/test.jpg');
 });
 
-test('prevents a non-owner from deleting media', function () {
+it('prevents a non-owner from deleting media', function () {
     $owner = User::factory()->create();
     $other = User::factory()->create();
     $medium = Media::factory()->for($owner)->create();
@@ -37,7 +37,7 @@ test('prevents a non-owner from deleting media', function () {
     $this->assertDatabaseHas('media', ['id' => $medium->id]);
 });
 
-test('redirects guests away from media deletion', function () {
+it('redirects guests away from media deletion', function () {
     $medium = Media::factory()->create();
 
     $this->delete(route('media.destroy', $medium))

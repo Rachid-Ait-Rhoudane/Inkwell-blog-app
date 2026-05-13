@@ -4,7 +4,7 @@ use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
 
-test('shows the comment listing', function () {
+it('shows the comment listing', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user)
@@ -12,12 +12,12 @@ test('shows the comment listing', function () {
         ->assertSuccessful();
 });
 
-test('redirects guests away from comment listing', function () {
+it('redirects guests away from comment listing', function () {
     $this->get(route('comments.index'))
         ->assertRedirect(route('login'));
 });
 
-test('only shows the authenticated user\'s own comments', function () {
+it('only shows the authenticated user\'s own comments', function () {
     $user = User::factory()->create();
     $other = User::factory()->create();
 
@@ -31,7 +31,7 @@ test('only shows the authenticated user\'s own comments', function () {
         );
 });
 
-test('eager loads the post for each comment', function () {
+it('eager loads the post for each comment', function () {
     $user = User::factory()->create();
     $post = Post::factory()->for($user)->create();
 
@@ -45,7 +45,7 @@ test('eager loads the post for each comment', function () {
         );
 });
 
-test('paginates comments at 15 per page', function () {
+it('paginates comments at 15 per page', function () {
     $user = User::factory()->create();
 
     Comment::factory()->for($user)->count(16)->create();

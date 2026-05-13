@@ -3,7 +3,7 @@
 use App\Models\Category;
 use App\Models\User;
 
-test('shows the create category page', function () {
+it('shows the create category page', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user)
@@ -11,7 +11,7 @@ test('shows the create category page', function () {
         ->assertSuccessful();
 });
 
-test('creates a new category', function () {
+it('creates a new category', function () {
     $user = User::factory()->create();
     $category = Category::factory()->make();
 
@@ -33,7 +33,7 @@ test('creates a new category', function () {
     ]);
 });
 
-test('creates a category without a description', function () {
+it('creates a category without a description', function () {
     $user = User::factory()->create();
     $category = Category::factory()->make();
 
@@ -51,7 +51,7 @@ test('creates a category without a description', function () {
     ]);
 });
 
-test('redirects guests away from category creation', function () {
+it('redirects guests away from category creation', function () {
     $this->get(route('categories.create'))
         ->assertRedirect(route('login'));
 
@@ -59,7 +59,7 @@ test('redirects guests away from category creation', function () {
         ->assertRedirect(route('login'));
 });
 
-test('rejects a category missing a name', function () {
+it('rejects a category missing a name', function () {
     $user = User::factory()->create();
     $category = Category::factory()->make();
 
@@ -71,7 +71,7 @@ test('rejects a category missing a name', function () {
         ->assertSessionHasErrors(['name']);
 });
 
-test('rejects a category missing a slug', function () {
+it('rejects a category missing a slug', function () {
     $user = User::factory()->create();
     $category = Category::factory()->make();
 
@@ -83,7 +83,7 @@ test('rejects a category missing a slug', function () {
         ->assertSessionHasErrors(['slug']);
 });
 
-test('rejects a duplicate slug', function () {
+it('rejects a duplicate slug', function () {
     $user = User::factory()->create();
     $existing = Category::factory()->for($user)->create();
     $category = Category::factory()->make();

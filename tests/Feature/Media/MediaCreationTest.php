@@ -4,7 +4,7 @@ use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
-test('uploads a media file', function () {
+it('uploads a media file', function () {
     $user = User::factory()->create();
 
     Storage::fake('public');
@@ -29,7 +29,7 @@ test('uploads a media file', function () {
     Storage::disk('public')->assertExists('media/'.$file->hashName());
 });
 
-test('uploads multiple files at once', function () {
+it('uploads multiple files at once', function () {
     $user = User::factory()->create();
 
     Storage::fake('public');
@@ -50,12 +50,12 @@ test('uploads multiple files at once', function () {
     expect($user->media()->count())->toBe(3);
 });
 
-test('redirects guests away from media upload', function () {
+it('redirects guests away from media upload', function () {
     $this->post(route('media.store'))
         ->assertRedirect(route('login'));
 });
 
-test('rejects an upload with no files field', function () {
+it('rejects an upload with no files field', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user)
@@ -63,7 +63,7 @@ test('rejects an upload with no files field', function () {
         ->assertSessionHasErrors(['files']);
 });
 
-test('rejects an upload with an empty files array', function () {
+it('rejects an upload with an empty files array', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user)

@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
-test('updates a post', function () {
+it('updates a post', function () {
     $user = User::factory()->create();
     $post = Post::factory()->for($user)->create();
     $category = Category::factory()->create();
@@ -46,7 +46,7 @@ test('updates a post', function () {
     Storage::disk('public')->assertExists('media/'.$file->hashName());
 });
 
-test('attaches existing media via media_ids on update', function () {
+it('attaches existing media via media_ids on update', function () {
     $user = User::factory()->create();
     $post = Post::factory()->for($user)->create();
     $media = Media::factory()->for($user)->create();
@@ -67,7 +67,7 @@ test('attaches existing media via media_ids on update', function () {
     expect($post->media->first()->id)->toBe($media->id);
 });
 
-test('prevents a non-owner from updating a post', function () {
+it('prevents a non-owner from updating a post', function () {
     $owner = User::factory()->create();
     $other = User::factory()->create();
     $post = Post::factory()->for($owner)->create();
@@ -83,14 +83,14 @@ test('prevents a non-owner from updating a post', function () {
         ->assertForbidden();
 });
 
-test('redirects guests away from post update', function () {
+it('redirects guests away from post update', function () {
     $post = Post::factory()->create();
 
     $this->put(route('posts.update', $post))
         ->assertRedirect(route('login'));
 });
 
-test('allows updating a post with its own slug', function () {
+it('allows updating a post with its own slug', function () {
     $user = User::factory()->create();
     $post = Post::factory()->for($user)->create();
     $updated = Post::factory()->make();
@@ -105,7 +105,7 @@ test('allows updating a post with its own slug', function () {
         ->assertRedirect(route('posts.index', absolute: false));
 });
 
-test('rejects a slug already taken by another post', function () {
+it('rejects a slug already taken by another post', function () {
     $user = User::factory()->create();
     $postA = Post::factory()->for($user)->create();
     $postB = Post::factory()->for($user)->create();
@@ -122,7 +122,7 @@ test('rejects a slug already taken by another post', function () {
         ->assertSessionHasErrors(['slug']);
 });
 
-test('sets published_at to now when publishing for the first time', function () {
+it('sets published_at to now when publishing for the first time', function () {
     $user = User::factory()->create();
     $post = Post::factory()->for($user)->create(['status' => 'draft', 'published_at' => null]);
     $updated = Post::factory()->make();
@@ -139,7 +139,7 @@ test('sets published_at to now when publishing for the first time', function () 
     expect($post->refresh()->published_at)->not->toBeNull();
 });
 
-test('preserves existing published_at when re-publishing', function () {
+it('preserves existing published_at when re-publishing', function () {
     $originalDate = '2024-06-01 00:00:00';
     $user = User::factory()->create();
     $post = Post::factory()->for($user)->create([
@@ -160,7 +160,7 @@ test('preserves existing published_at when re-publishing', function () {
     expect($post->refresh()->published_at->toDateTimeString())->toBe($originalDate);
 });
 
-test('clears published_at when changing to draft', function () {
+it('clears published_at when changing to draft', function () {
     $user = User::factory()->create();
     $post = Post::factory()->for($user)->published()->create();
     $updated = Post::factory()->make();
@@ -176,7 +176,7 @@ test('clears published_at when changing to draft', function () {
     expect($post->refresh()->published_at)->toBeNull();
 });
 
-test('rejects an update missing a title', function () {
+it('rejects an update missing a title', function () {
     $user = User::factory()->create();
     $post = Post::factory()->for($user)->create();
 
@@ -190,7 +190,7 @@ test('rejects an update missing a title', function () {
         ->assertSessionHasErrors(['title']);
 });
 
-test('rejects an update missing a slug', function () {
+it('rejects an update missing a slug', function () {
     $user = User::factory()->create();
     $post = Post::factory()->for($user)->create();
 
@@ -204,7 +204,7 @@ test('rejects an update missing a slug', function () {
         ->assertSessionHasErrors(['slug']);
 });
 
-test('rejects an update missing content', function () {
+it('rejects an update missing content', function () {
     $user = User::factory()->create();
     $post = Post::factory()->for($user)->create();
 
@@ -218,7 +218,7 @@ test('rejects an update missing content', function () {
         ->assertSessionHasErrors(['content']);
 });
 
-test('rejects an update missing a status', function () {
+it('rejects an update missing a status', function () {
     $user = User::factory()->create();
     $post = Post::factory()->for($user)->create();
 
@@ -232,7 +232,7 @@ test('rejects an update missing a status', function () {
         ->assertSessionHasErrors(['status']);
 });
 
-test('rejects an invalid status on update', function (string $status) {
+it('rejects an invalid status on update', function (string $status) {
     $user = User::factory()->create();
     $post = Post::factory()->for($user)->create();
 
@@ -247,7 +247,7 @@ test('rejects an invalid status on update', function (string $status) {
         ->assertSessionHasErrors(['status']);
 })->with(['scheduled', 'pending', 'archived']);
 
-test('rejects a non-existent category id on update', function () {
+it('rejects a non-existent category id on update', function () {
     $user = User::factory()->create();
     $post = Post::factory()->for($user)->create();
 
@@ -263,7 +263,7 @@ test('rejects a non-existent category id on update', function () {
         ->assertSessionHasErrors(['category_ids.0']);
 });
 
-test('rejects a non-existent media id on update', function () {
+it('rejects a non-existent media id on update', function () {
     $user = User::factory()->create();
     $post = Post::factory()->for($user)->create();
 

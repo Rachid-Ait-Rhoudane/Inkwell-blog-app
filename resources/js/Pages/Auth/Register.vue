@@ -1,4 +1,8 @@
 <script setup>
+import InputError from '../../Components/InputError.vue'
+import InputLabel from '../../Components/InputLabel.vue'
+import PrimaryButton from '../../Components/PrimaryButton.vue'
+import TextInput from '../../Components/TextInput.vue'
 import { Head, Link, useForm } from '@inertiajs/vue3'
 
 const form = useForm({
@@ -29,76 +33,60 @@ function submit() {
 
             <form @submit.prevent="submit" class="space-y-4">
                 <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">
-                        Name
-                    </label>
-                    <input
+                    <InputLabel for="name" value="Name" />
+                    <TextInput
                         id="name"
                         v-model="form.name"
                         type="text"
                         autocomplete="name"
                         required
-                        class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition"
                         placeholder="Jane Smith"
                     />
-                    <p v-if="form.errors.name" class="mt-1 text-red-500 text-xs">{{ form.errors.name }}</p>
+                    <InputError :message="form.errors.name" />
                 </div>
 
                 <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
-                        Email
-                    </label>
-                    <input
+                    <InputLabel for="email" value="Email" />
+                    <TextInput
                         id="email"
                         v-model="form.email"
                         type="email"
                         autocomplete="email"
                         required
-                        class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition"
                         placeholder="you@example.com"
                     />
-                    <p v-if="form.errors.email" class="mt-1 text-red-500 text-xs">{{ form.errors.email }}</p>
+                    <InputError :message="form.errors.email" />
                 </div>
 
                 <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
-                        Password
-                    </label>
-                    <input
+                    <InputLabel for="password" value="Password" />
+                    <TextInput
                         id="password"
                         v-model="form.password"
                         type="password"
                         autocomplete="new-password"
                         required
-                        class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition"
                         placeholder="Min. 8 characters"
                     />
-                    <p v-if="form.errors.password" class="mt-1 text-red-500 text-xs">{{ form.errors.password }}</p>
+                    <InputError :message="form.errors.password" />
                 </div>
 
                 <div>
-                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">
-                        Confirm password
-                    </label>
-                    <input
+                    <InputLabel for="password_confirmation" value="Confirm password" />
+                    <TextInput
                         id="password_confirmation"
                         v-model="form.password_confirmation"
                         type="password"
                         autocomplete="new-password"
                         required
-                        class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition"
                         placeholder="••••••••"
                     />
-                    <p v-if="form.errors.password_confirmation" class="mt-1 text-red-500 text-xs">{{ form.errors.password_confirmation }}</p>
+                    <InputError :message="form.errors.password_confirmation" />
                 </div>
 
-                <button
-                    type="submit"
-                    :disabled="form.processing"
-                    class="w-full px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-700 disabled:opacity-50 transition-colors cursor-pointer"
-                >
+                <PrimaryButton class="w-full justify-center" :disabled="form.processing">
                     {{ form.processing ? 'Creating account…' : 'Create account' }}
-                </button>
+                </PrimaryButton>
             </form>
 
             <p class="mt-6 text-center text-sm text-gray-500">

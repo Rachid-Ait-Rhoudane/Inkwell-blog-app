@@ -3,7 +3,7 @@
 use App\Models\Comment;
 use App\Models\User;
 
-test('deletes a comment', function () {
+it('deletes a comment', function () {
     $user = User::factory()->create();
     $comment = Comment::factory()->for($user)->create();
 
@@ -16,7 +16,7 @@ test('deletes a comment', function () {
     $this->assertDatabaseMissing('comments', ['id' => $comment->id]);
 });
 
-test('prevents a non-owner from deleting a comment', function () {
+it('prevents a non-owner from deleting a comment', function () {
     $owner = User::factory()->create();
     $other = User::factory()->create();
     $comment = Comment::factory()->for($owner)->create();
@@ -28,7 +28,7 @@ test('prevents a non-owner from deleting a comment', function () {
     $this->assertDatabaseHas('comments', ['id' => $comment->id]);
 });
 
-test('redirects guests away from comment deletion', function () {
+it('redirects guests away from comment deletion', function () {
     $comment = Comment::factory()->create();
 
     $this->delete(route('comments.destroy', $comment))

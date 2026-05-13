@@ -98,6 +98,14 @@ Route::get('/comments', [CommentController::class, 'index'])
     ->name('comments.index')
     ->middleware('auth');
 
+Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])
+    ->name('comments.edit')
+    ->middleware('auth');
+
+Route::put('/comments/{comment}', [CommentController::class, 'update'])
+    ->name('comments.update')
+    ->middleware('auth');
+
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])
     ->name('comments.destroy')
     ->middleware('auth');

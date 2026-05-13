@@ -3,7 +3,7 @@
 use App\Models\Category;
 use App\Models\User;
 
-test('shows the edit category page', function () {
+it('shows the edit category page', function () {
     $user = User::factory()->create();
     $category = Category::factory()->for($user)->create();
 
@@ -12,7 +12,7 @@ test('shows the edit category page', function () {
         ->assertSuccessful();
 });
 
-test('prevents a non-owner from viewing the edit page', function () {
+it('prevents a non-owner from viewing the edit page', function () {
     $owner = User::factory()->create();
     $other = User::factory()->create();
     $category = Category::factory()->for($owner)->create();
@@ -22,7 +22,7 @@ test('prevents a non-owner from viewing the edit page', function () {
         ->assertForbidden();
 });
 
-test('updates a category', function () {
+it('updates a category', function () {
     $user = User::factory()->create();
     $category = Category::factory()->for($user)->create();
     $updated = Category::factory()->make();
@@ -44,7 +44,7 @@ test('updates a category', function () {
     expect($category->slug)->toBe($updated->slug);
 });
 
-test('allows updating a category with its own slug', function () {
+it('allows updating a category with its own slug', function () {
     $user = User::factory()->create();
     $category = Category::factory()->for($user)->create();
     $updated = Category::factory()->make();
@@ -57,7 +57,7 @@ test('allows updating a category with its own slug', function () {
         ->assertRedirect(route('categories.index'));
 });
 
-test('rejects a slug already taken by another category', function () {
+it('rejects a slug already taken by another category', function () {
     $user = User::factory()->create();
     $categoryA = Category::factory()->for($user)->create();
     $categoryB = Category::factory()->for($user)->create();
@@ -72,7 +72,7 @@ test('rejects a slug already taken by another category', function () {
         ->assertSessionHasErrors(['slug']);
 });
 
-test('prevents a non-owner from updating a category', function () {
+it('prevents a non-owner from updating a category', function () {
     $owner = User::factory()->create();
     $other = User::factory()->create();
     $category = Category::factory()->for($owner)->create();
@@ -86,14 +86,14 @@ test('prevents a non-owner from updating a category', function () {
         ->assertForbidden();
 });
 
-test('redirects guests away from category update', function () {
+it('redirects guests away from category update', function () {
     $category = Category::factory()->create();
 
     $this->put(route('categories.update', $category))
         ->assertRedirect(route('login'));
 });
 
-test('rejects an update missing a name', function () {
+it('rejects an update missing a name', function () {
     $user = User::factory()->create();
     $category = Category::factory()->for($user)->create();
 
@@ -105,7 +105,7 @@ test('rejects an update missing a name', function () {
         ->assertSessionHasErrors(['name']);
 });
 
-test('rejects an update missing a slug', function () {
+it('rejects an update missing a slug', function () {
     $user = User::factory()->create();
     $category = Category::factory()->for($user)->create();
 

@@ -83,7 +83,7 @@ function formatDate(comment) {
                         <td class="px-6 py-4 hidden md:table-cell">
                             <Link
                                 v-if="comment.post"
-                                :href="`/posts/${comment.post.id}/edit`"
+                                :href="`/posts/${comment.post.slug}`"
                                 class="text-indigo-600 hover:text-indigo-800 font-medium transition-colors line-clamp-1 max-w-xs block"
                             >
                                 {{ comment.post.title }}
@@ -97,8 +97,16 @@ function formatDate(comment) {
                         </td>
 
                         <!-- Actions -->
-                        <td class="px-6 py-4 text-right">
-                            <DangerButton @click="openDeleteModal(comment)">Delete</DangerButton>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center justify-end gap-3">
+                                <Link
+                                    :href="`/comments/${comment.id}/edit`"
+                                    class="text-xs font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
+                                >
+                                    Edit
+                                </Link>
+                                <DangerButton @click="openDeleteModal(comment)">Delete</DangerButton>
+                            </div>
                         </td>
                     </tr>
                 </tbody>

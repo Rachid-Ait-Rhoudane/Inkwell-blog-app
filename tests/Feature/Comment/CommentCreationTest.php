@@ -3,7 +3,7 @@
 use App\Models\Post;
 use App\Models\User;
 
-test('posts a comment on a post', function () {
+it('posts a comment on a post', function () {
     $user = User::factory()->create();
     $post = Post::factory()->for($user)->create();
 
@@ -23,14 +23,14 @@ test('posts a comment on a post', function () {
     ]);
 });
 
-test('redirects guests away from comment creation', function () {
+it('redirects guests away from comment creation', function () {
     $post = Post::factory()->create();
 
     $this->post(route('comments.store', $post))
         ->assertRedirect(route('login'));
 });
 
-test('rejects a comment missing a body', function () {
+it('rejects a comment missing a body', function () {
     $user = User::factory()->create();
     $post = Post::factory()->for($user)->create();
 
@@ -40,7 +40,7 @@ test('rejects a comment missing a body', function () {
         ->assertSessionHasErrors(['body']);
 });
 
-test('trims whitespace from the comment body', function () {
+it('trims whitespace from the comment body', function () {
     $user = User::factory()->create();
     $post = Post::factory()->for($user)->create();
 

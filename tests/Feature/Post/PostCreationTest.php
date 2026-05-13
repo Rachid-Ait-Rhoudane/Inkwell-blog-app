@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
-test('shows the create new post listing', function () {
+it('shows the create new post listing', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user)
@@ -15,7 +15,7 @@ test('shows the create new post listing', function () {
         ->assertSuccessful();
 });
 
-test('creates a new Post', function () {
+it('creates a new Post', function () {
     $user = User::factory()->create();
     $category = Category::factory()->create();
     $post = Post::factory()->make();
@@ -54,7 +54,7 @@ test('creates a new Post', function () {
     Storage::disk('public')->assertExists('media/'.$file->hashName());
 });
 
-test('sets published_at automatically when publishing without a date', function () {
+it('sets published_at automatically when publishing without a date', function () {
     $user = User::factory()->create();
     $post = Post::factory()->make();
 
@@ -70,7 +70,7 @@ test('sets published_at automatically when publishing without a date', function 
     expect(Post::first()->published_at)->not->toBeNull();
 });
 
-test('clears published_at when saving as draft', function () {
+it('clears published_at when saving as draft', function () {
     $user = User::factory()->create();
     $post = Post::factory()->make();
 
@@ -86,7 +86,7 @@ test('clears published_at when saving as draft', function () {
     expect(Post::first()->published_at)->toBeNull();
 });
 
-test('attaches existing media via media_ids', function () {
+it('attaches existing media via media_ids', function () {
     $user = User::factory()->create();
     $post = Post::factory()->make();
     $media = Media::factory()->for($user)->create();
@@ -106,7 +106,7 @@ test('attaches existing media via media_ids', function () {
     expect($newPost->media->first()->id)->toBe($media->id);
 });
 
-test('redirects guests away from post creation', function () {
+it('redirects guests away from post creation', function () {
     $this->get(route('posts.create'))
         ->assertRedirect(route('login'));
 
@@ -114,7 +114,7 @@ test('redirects guests away from post creation', function () {
         ->assertRedirect(route('login'));
 });
 
-test('rejects a post missing a title', function () {
+it('rejects a post missing a title', function () {
     $user = User::factory()->create();
     $post = Post::factory()->make();
 
@@ -128,7 +128,7 @@ test('rejects a post missing a title', function () {
         ->assertSessionHasErrors(['title']);
 });
 
-test('rejects a post missing a slug', function () {
+it('rejects a post missing a slug', function () {
     $user = User::factory()->create();
     $post = Post::factory()->make();
 
@@ -142,7 +142,7 @@ test('rejects a post missing a slug', function () {
         ->assertSessionHasErrors(['slug']);
 });
 
-test('rejects a post missing content', function () {
+it('rejects a post missing content', function () {
     $user = User::factory()->create();
     $post = Post::factory()->make();
 
@@ -156,7 +156,7 @@ test('rejects a post missing content', function () {
         ->assertSessionHasErrors(['content']);
 });
 
-test('rejects a post missing a status', function () {
+it('rejects a post missing a status', function () {
     $user = User::factory()->create();
     $post = Post::factory()->make();
 
@@ -170,7 +170,7 @@ test('rejects a post missing a status', function () {
         ->assertSessionHasErrors(['status']);
 });
 
-test('rejects a duplicate slug', function () {
+it('rejects a duplicate slug', function () {
     $user = User::factory()->create();
     $existing = Post::factory()->for($user)->create();
     $post = Post::factory()->make();
@@ -186,7 +186,7 @@ test('rejects a duplicate slug', function () {
         ->assertSessionHasErrors(['slug']);
 });
 
-test('rejects an invalid status', function (string $status) {
+it('rejects an invalid status', function (string $status) {
     $user = User::factory()->create();
     $post = Post::factory()->make();
 
@@ -201,7 +201,7 @@ test('rejects an invalid status', function (string $status) {
         ->assertSessionHasErrors(['status']);
 })->with(['scheduled', 'pending', 'archived']);
 
-test('rejects a non-existent category id', function () {
+it('rejects a non-existent category id', function () {
     $user = User::factory()->create();
     $post = Post::factory()->make();
 
@@ -217,7 +217,7 @@ test('rejects a non-existent category id', function () {
         ->assertSessionHasErrors(['category_ids.0']);
 });
 
-test('rejects a non-existent media id', function () {
+it('rejects a non-existent media id', function () {
     $user = User::factory()->create();
     $post = Post::factory()->make();
 

@@ -2,7 +2,7 @@
 
 use App\Models\User;
 
-test('shows the login page', function () {
+it('shows the login page', function () {
     $response = $this->get('/login');
 
     $response->assertStatus(200);
@@ -10,7 +10,7 @@ test('shows the login page', function () {
     $response->assertOk();
 });
 
-test('user can authenticate using the login screen', function () {
+it('user can authenticate using the login screen', function () {
 
     $user = User::factory()->create([
         'email' => 'test@example.com',
@@ -28,7 +28,7 @@ test('user can authenticate using the login screen', function () {
     $response->assertRedirect(route('welcome', absolute: false));
 });
 
-test("wrong email can't be allowed to login", function () {
+it("wrong email can't be allowed to login", function () {
 
     $response = $this->post(route('login.store'), [
         'email' => 'wrong@example.com',
@@ -40,7 +40,7 @@ test("wrong email can't be allowed to login", function () {
     $this->assertGuest();
 });
 
-test("wrong password can't be allowed to login", function () {
+it("wrong password can't be allowed to login", function () {
 
     $user = User::factory()->create([
         'email' => 'test@example.com',
@@ -56,7 +56,7 @@ test("wrong password can't be allowed to login", function () {
     $this->assertGuest();
 });
 
-test('the email field of the login must be a valide email', function () {
+it('the email field of the login must be a valide email', function () {
 
     $response = $this->post(route('login.store'), [
         'email' => 'wrongexample.com',

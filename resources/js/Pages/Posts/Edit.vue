@@ -1,5 +1,8 @@
 <script setup>
 import AppLayout from '../../Layout/AppLayout.vue'
+import InputError from '../../Components/InputError.vue'
+import InputLabel from '../../Components/InputLabel.vue'
+import PrimaryButton from '../../Components/PrimaryButton.vue'
 import SelectCategory from '../../Components/SelectCategory.vue'
 import SelectInput from '../../Components/SelectInput.vue'
 import SelectMediaFilesModal from '../../Components/SelectMediaFilesModal.vue'
@@ -92,13 +95,9 @@ function submit() {
                 Back to Posts
             </Link>
 
-            <button
-                :disabled="form.processing"
-                class="px-5 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-700 disabled:opacity-50 transition-colors"
-                @click="submit"
-            >
+            <PrimaryButton type="button" :disabled="form.processing" @click="submit">
                 {{ submitLabel }}
-            </button>
+            </PrimaryButton>
         </div>
 
         <!-- Body -->
@@ -108,20 +107,17 @@ function submit() {
                 <!-- Title + Slug -->
                 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
                     <div>
-                        <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                        <InputLabel for="title" value="Title" />
                         <TextInput
                             id="title"
                             v-model="form.title"
                             placeholder="Your post title…"
                         />
-                        <p v-if="form.errors.title" class="mt-1 text-red-500 text-xs">{{ form.errors.title }}</p>
+                        <InputError :message="form.errors.title" />
                     </div>
 
                     <div>
-                        <label for="slug" class="block text-sm font-medium text-gray-700 mb-1">
-                            Slug
-                            <span class="font-normal text-gray-400 text-xs ml-1">(auto-generated)</span>
-                        </label>
+                        <InputLabel for="slug">Slug <span class="font-normal text-gray-400 text-xs ml-1">(auto-generated)</span></InputLabel>
                         <SlugInput
                             id="slug"
                             v-model="form.slug"
@@ -129,13 +125,13 @@ function submit() {
                             placeholder="post-slug"
                             @input="slugManuallyEdited = true"
                         />
-                        <p v-if="form.errors.slug" class="mt-1 text-red-500 text-xs">{{ form.errors.slug }}</p>
+                        <InputError :message="form.errors.slug" />
                     </div>
                 </div>
 
                 <!-- Content -->
                 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-                    <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Content</label>
+                    <InputLabel for="content" value="Content" />
                     <TextArea
                         id="content"
                         v-model="form.content"
@@ -143,7 +139,7 @@ function submit() {
                         placeholder="Write your post content here…"
                         class="font-mono leading-relaxed"
                     />
-                    <p v-if="form.errors.content" class="mt-1 text-red-500 text-xs">{{ form.errors.content }}</p>
+                    <InputError :message="form.errors.content" />
                 </div>
             </div>
 
@@ -222,9 +218,7 @@ function submit() {
                         </svg>
                         Select / Upload Media
                     </button>
-                    <p v-if="form.errors.media_ids || form.errors.media_files" class="mt-1.5 text-red-500 text-xs">
-                        {{ form.errors.media_ids || form.errors.media_files }}
-                    </p>
+                    <InputError :message="form.errors.media_ids || form.errors.media_files" />
                 </div>
 
                 <!-- Categories -->
@@ -234,15 +228,12 @@ function submit() {
                         :categories="props.categories"
                         v-model="form.category_ids"
                     />
-                    <p v-if="form.errors.category_ids" class="mt-1.5 text-red-500 text-xs">{{ form.errors.category_ids }}</p>
+                    <InputError :message="form.errors.category_ids" />
                 </div>
 
                 <!-- Excerpt -->
                 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-                    <label for="excerpt" class="block text-sm font-medium text-gray-700 mb-1">
-                        Excerpt
-                        <span class="font-normal text-gray-400 text-xs ml-1">(optional)</span>
-                    </label>
+                    <InputLabel for="excerpt">Excerpt <span class="font-normal text-gray-400 text-xs ml-1">(optional)</span></InputLabel>
                     <TextArea
                         id="excerpt"
                         v-model="form.excerpt"
@@ -251,7 +242,7 @@ function submit() {
                         placeholder="A short summary of your post…"
                     />
                     <div class="flex items-start justify-between mt-1 gap-2">
-                        <p v-if="form.errors.excerpt" class="text-red-500 text-xs">{{ form.errors.excerpt }}</p>
+                        <InputError :message="form.errors.excerpt" />
                         <p class="text-xs text-gray-400 ml-auto shrink-0">{{ form.excerpt.length }}/500</p>
                     </div>
                 </div>
@@ -259,25 +250,22 @@ function submit() {
                 <!-- Status & publish date -->
                 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
                     <div>
-                        <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                        <InputLabel for="status" value="Status" />
                         <SelectInput id="status" v-model="form.status">
                             <option value="draft">Draft</option>
                             <option value="published">Published</option>
                         </SelectInput>
-                        <p v-if="form.errors.status" class="mt-1 text-red-500 text-xs">{{ form.errors.status }}</p>
+                        <InputError :message="form.errors.status" />
                     </div>
 
                     <div v-if="form.status === 'published'">
-                        <label for="published_at" class="block text-sm font-medium text-gray-700 mb-1">
-                            Publish date
-                            <span class="font-normal text-gray-400 text-xs ml-1">(defaults to now)</span>
-                        </label>
+                        <InputLabel for="published_at">Publish date <span class="font-normal text-gray-400 text-xs ml-1">(defaults to now)</span></InputLabel>
                         <TextInput
                             id="published_at"
                             type="datetime-local"
                             v-model="form.published_at"
                         />
-                        <p v-if="form.errors.published_at" class="mt-1 text-red-500 text-xs">{{ form.errors.published_at }}</p>
+                        <InputError :message="form.errors.published_at" />
                     </div>
                 </div>
             </div>

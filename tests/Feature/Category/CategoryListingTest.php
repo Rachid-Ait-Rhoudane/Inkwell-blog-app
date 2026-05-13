@@ -4,7 +4,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
 
-test('shows the category listing', function () {
+it('shows the category listing', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user)
@@ -12,12 +12,12 @@ test('shows the category listing', function () {
         ->assertSuccessful();
 });
 
-test('redirects guests away from category listing', function () {
+it('redirects guests away from category listing', function () {
     $this->get(route('categories.index'))
         ->assertRedirect(route('login'));
 });
 
-test('only shows the authenticated user\'s own categories', function () {
+it('only shows the authenticated user\'s own categories', function () {
     $user = User::factory()->create();
     $other = User::factory()->create();
 
@@ -31,7 +31,7 @@ test('only shows the authenticated user\'s own categories', function () {
         );
 });
 
-test('includes the post count for each category', function () {
+it('includes the post count for each category', function () {
     $user = User::factory()->create();
     $category = Category::factory()->for($user)->create();
     $posts = Post::factory()->for($user)->count(3)->create();
@@ -44,7 +44,7 @@ test('includes the post count for each category', function () {
         );
 });
 
-test('orders categories alphabetically by name', function () {
+it('orders categories alphabetically by name', function () {
     $user = User::factory()->create();
 
     Category::factory()->for($user)->create(['name' => 'Zebra', 'slug' => 'zebra']);
@@ -60,7 +60,7 @@ test('orders categories alphabetically by name', function () {
         );
 });
 
-test('paginates categories at 15 per page', function () {
+it('paginates categories at 15 per page', function () {
     $user = User::factory()->create();
 
     Category::factory()->for($user)->count(16)->create();

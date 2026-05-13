@@ -3,7 +3,7 @@
 use App\Models\Category;
 use App\Models\User;
 
-test('deletes a category', function () {
+it('deletes a category', function () {
     $user = User::factory()->create();
     $category = Category::factory()->for($user)->create();
 
@@ -16,7 +16,7 @@ test('deletes a category', function () {
     $this->assertDatabaseMissing('categories', ['id' => $category->id]);
 });
 
-test('prevents a non-owner from deleting a category', function () {
+it('prevents a non-owner from deleting a category', function () {
     $owner = User::factory()->create();
     $other = User::factory()->create();
     $category = Category::factory()->for($owner)->create();
@@ -28,7 +28,7 @@ test('prevents a non-owner from deleting a category', function () {
     $this->assertDatabaseHas('categories', ['id' => $category->id]);
 });
 
-test('redirects guests away from category deletion', function () {
+it('redirects guests away from category deletion', function () {
     $category = Category::factory()->create();
 
     $this->delete(route('categories.destroy', $category))

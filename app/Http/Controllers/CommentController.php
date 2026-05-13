@@ -52,14 +52,30 @@ class CommentController extends Controller
         //
     }
 
-    public function edit(string $id)
+    public function edit(Request $request, Comment $comment): Response
     {
-        //
+        abort_if($request->user()->isNot($comment->user), 403);
+
+        $comment->load('post:id,title,slug');
+
+        return Inertia::render('Comments/Edit', [
+            'comment' => $comment,
+        ]);
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, Comment $comment): RedirectResponse
     {
-        //
+        abort_if($request->user()->isNot($comment->user), 403);
+
+        $validated = $request->validate([
+            'body' => ['required', 'string', 'max:2000'],
+        ]);
+
+        $comment->update($validated);
+
+        return redirect()->route('comments.index')
+            ->with('status', 'success')
+            ->with('message', 'Comment updated successfully.');
     }
 
     public function destroy(Request $request, Comment $comment): RedirectResponse

@@ -154,6 +154,7 @@ function confirmDelete() {
         <template #footer>
             <SecondaryButton @click="closeDeleteModal">Cancel</SecondaryButton>
             <DangerButton
+                data-test="delete"
                 class="ms-3"
                 :disabled="deleting"
                 @click="confirmDelete"

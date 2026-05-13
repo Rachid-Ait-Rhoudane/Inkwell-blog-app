@@ -3,7 +3,7 @@
 use App\Models\Post;
 use App\Models\User;
 
-test('deletes a post', function () {
+it('deletes a post', function () {
     $user = User::factory()->create();
     $post = Post::factory()->for($user)->create();
 
@@ -16,7 +16,7 @@ test('deletes a post', function () {
     $this->assertDatabaseMissing('posts', ['id' => $post->id]);
 });
 
-test('prevents a non-owner from deleting a post', function () {
+it('prevents a non-owner from deleting a post', function () {
     $owner = User::factory()->create();
     $other = User::factory()->create();
     $post = Post::factory()->for($owner)->create();
@@ -28,7 +28,7 @@ test('prevents a non-owner from deleting a post', function () {
     $this->assertDatabaseHas('posts', ['id' => $post->id]);
 });
 
-test('redirects guests away from post deletion', function () {
+it('redirects guests away from post deletion', function () {
     $post = Post::factory()->create();
 
     $this->delete(route('posts.destroy', $post))

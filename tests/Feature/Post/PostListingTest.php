@@ -3,7 +3,7 @@
 use App\Models\Post;
 use App\Models\User;
 
-test('shows the post listing', function () {
+it('shows the post listing', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user)
@@ -11,12 +11,12 @@ test('shows the post listing', function () {
         ->assertSuccessful();
 });
 
-test('redirects guests away from post listing', function () {
+it('redirects guests away from post listing', function () {
     $this->get(route('posts.index'))
         ->assertRedirect(route('login'));
 });
 
-test('only shows the authenticated user\'s own posts', function () {
+it('only shows the authenticated user\'s own posts', function () {
     $user = User::factory()->create();
     $other = User::factory()->create();
 
@@ -30,7 +30,7 @@ test('only shows the authenticated user\'s own posts', function () {
         );
 });
 
-test('filters posts by status', function () {
+it('filters posts by status', function () {
     $user = User::factory()->create();
 
     Post::factory()->for($user)->count(2)->create(['status' => 'draft']);
@@ -43,7 +43,7 @@ test('filters posts by status', function () {
         );
 });
 
-test('passes status filter to the view', function () {
+it('passes status filter to the view', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user)
@@ -53,7 +53,7 @@ test('passes status filter to the view', function () {
         );
 });
 
-test('paginates posts at 10 per page', function () {
+it('paginates posts at 10 per page', function () {
     $user = User::factory()->create();
 
     Post::factory()->for($user)->count(11)->create();
