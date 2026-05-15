@@ -1,14 +1,55 @@
-FROM php:8.2.30-fpm
+# Composer stage
+FROM composer:2.7.1 AS composer
+
+WORKDIR /app
+
+COPY . .
+
+RUN composer install \
+    --no-dev \
+    --optimize-autoloader \
+    --no-interaction \
+    --no-scripts
+
+# Node stage
+FROM node:24-alpine AS node
+
+ARG APP_NAME
+
+ENV VITE_APP_NAME=${APP_NAME}
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+# Final runtime
+FROM php:8.3-fpm-alpine
 
 WORKDIR /var/www/html
 
-RUN apt-get update && apt-get install -y \
+RUN apk add --no-cache \
     libzip-dev \
-    unzip \
-    && docker-php-ext-install zip pdo_mysql
+    linux-headers \
+    && docker-php-ext-install \
+    pdo_mysql \
+    zip \
+    sockets
 
-COPY . /var/www/html/
+COPY --from=composer /app /var/www/html
+COPY --from=node /app/public/build /var/www/html/public/build
 
-RUN chown -R www-data:www-data /var/www/html
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+RUN mkdir -p \
+    storage/framework/cache \
+    storage/framework/sessions \
+    storage/framework/views \
+    storage/logs \
+    bootstrap/cache
+
+RUN chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
