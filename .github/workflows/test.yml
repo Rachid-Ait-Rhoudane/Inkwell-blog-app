@@ -56,5 +56,7 @@ jobs:
         run: npm install
       - name: Built frontend assets
         run: npm run build
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
       - name: Run the Feature Tests
         run: php artisan test --testsuite=Browser -vvv
