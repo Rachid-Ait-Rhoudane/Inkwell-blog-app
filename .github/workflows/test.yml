@@ -1,4 +1,4 @@
-name: "Test workflow"
+name: Test and build docker image
 
 on:
   push:
@@ -6,8 +6,31 @@ on:
       - main
 
 jobs:
-  hello_world:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: "Hello world"
-        run: echo "Hello World"
+      - name: Setup PHP and required dependencies
+        uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc
+        with:
+          php-version: "8.3"
+      - name: Clone the project's repo
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - name: Setup node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
+        with:
+          node-version: "24"
+      - name: Setup Mysql database
+        uses: mirromutth/mysql-action@de1fba8b3f90ce8db80f663a7043be3cf3231248
+        with:
+          mysql database: testing
+          mysql user: testing_user
+          mysql password: super_secret
+      - name: Setup environment variables
+        run: |
+          cp .env.example .env
+          echo "APP_ENV=testing" >> .env
+          echo "DB_DATABASE=testing" >> .env
+          echo "DB_CONNECTION=mysql" >> .env
+          echo "DB_PASSWORD=super_secret" >> .env
+          cat .env
+
