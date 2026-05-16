@@ -56,3 +56,5 @@ jobs:
         run: npm install
       - name: Built frontend assets
         run: npm run build
+      - name: Run the Feature Tests
+        run: php artisan test
