@@ -8,6 +8,21 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: testing
+          MYSQL_USER: testing_user
+          MYSQL_PASSWORD: super_secret
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
     steps:
       - name: Setup PHP and required dependencies
         uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc
@@ -19,12 +34,6 @@ jobs:
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
         with:
           node-version: "24"
-      - name: Setup Mysql database
-        uses: mirromutth/mysql-action@de1fba8b3f90ce8db80f663a7043be3cf3231248
-        with:
-          mysql database: testing
-          mysql user: testing_user
-          mysql password: super_secret
       - name: Setup environment variables
         run: |
           cp .env.example .env
@@ -36,12 +45,7 @@ jobs:
           echo "DB_USERNAME=testing_user" >> .env
           echo "DB_PASSWORD=super_secret" >> .env
 
-      - name: Wait for MySQL
-        run: |
-          until mysqladmin ping -h "127.0.0.1" --silent; do
-            echo "Waiting for MySQL..."
-            sleep 2
-          done
+
       - name: Install composer dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: Generate the key
