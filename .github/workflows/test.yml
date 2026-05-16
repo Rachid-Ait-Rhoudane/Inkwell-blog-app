@@ -59,4 +59,4 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
       - name: Run the Feature Tests
-        run: php artisan test --testsuite=Browser -vvv
+        run: php artisan test --testsuite=Feature,Browser -vvv
